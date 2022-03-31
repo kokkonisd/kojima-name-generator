@@ -35,7 +35,7 @@ section {
 }
 
 
-button {
+button, .die {
     cursor: pointer;
 }
 
@@ -50,7 +50,7 @@ input {
     text-align: center;
 }
 
-.submit-button {
+#submit-button {
     font-size: 24pt;
     color: black;
     background-color: white;
@@ -62,6 +62,15 @@ input {
     color: white;
     background-color: black;
     outline: none;
+}
+
+.die-roll, div[class^="dice-set-"] {
+    display: flex;
+    align-items: center;
+}
+
+.result {
+    margin-left: 20px;
 }
 
 .die {
@@ -106,4 +115,9 @@ input {
 
 .name {
     font-size: 20pt;
+}
+
+.error {
+    font-style: italic;
+    color: red;
 }

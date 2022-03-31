@@ -4,6 +4,7 @@
         <title>Kojima Name Generator</title>
 
         <link rel="stylesheet" href="main.css">
+        <script src="main.js"></script>
     </head>
     <body>
         <div id="main-container">
@@ -29,7 +30,7 @@
                     Roll a d6. If you get 1-5, you have 1 name, otherwise you have 1
                     name plus 6 other alternate names.
                 </p>
-                <p>
+                <div class="die-roll">
                     <button class="die" id="die-1-1">
                         <div class="dot-column">
                             <span class="dot"></span>
@@ -40,8 +41,9 @@
                             <span class="dot"></span>
                         </div>
                     </button>
-                    <p class="result"></p>
-                </p>
+                    <div class="result"></div>
+                </div>
+                <p class="error" id="error-die-1-1"></p>
             </section>
 
             <section>
@@ -57,6 +59,7 @@
                     </label>
                     <input id="input-1" />
                 </p>
+                <p class="error" id="error-input-1"></p>
                 <p>
                     <label for="input-2a">
                         What do you do at your occupation? Condense the verb in your
@@ -65,6 +68,7 @@
                     </label>
                     <input id="input-2a" />
                 </p>
+                <p class="error" id="error-input-2a"></p>
                 <p>
                     <label for="input-3">
                         What was your first pet's specific species/breed? If you never
@@ -72,6 +76,7 @@
                     </label>
                     <input id="input-3" />
                 </p>
+                <p class="error" id="error-input-3"></p>
                 <p>
                     <label for="input-4a">
                         What's your most embarrassing childhood memory? Be specific.
@@ -79,18 +84,21 @@
                     </label>
                     <input id="input-4a" />
                 </p>
+                <p class="error" id="error-input-4a"></p>
                 <p>
                     <label for="input-5">
                         What is the object you'd least like to be stabbed by?
                     </label>
                     <input id="input-5" />
                 </p>
+                <p class="error" id="error-input-5"></p>
                 <p>
                     <label for="input-6">
                         What is something you are good at? (Verb ending in -ing)
                     </label>
                     <input id="input-6" />
                 </p>
+                <p class="error" id="error-input-6"></p>
                 <p>
                     <label for="input-7">
                         How many carrots do you believe you could eat in one sitting, if
@@ -98,6 +106,7 @@
                     </label>
                     <input id="input-7" />
                 </p>
+                <p class="error" id="error-input-7"></p>
                 <p>
                     <label for="input-8">
                         What is your greatest intangible fear? (e.g. death, loneliness,
@@ -105,36 +114,42 @@
                     </label>
                     <input id="input-8" />
                 </p>
+                <p class="error" id="error-input-8"></p>
                 <p>
                     <label for="input-9">
                         What is your greatest tangible fear? (e.g. horses)
                     </label>
                     <input id="input-9" />
                 </p>
+                <p class="error" id="error-input-9"></p>
                 <p>
                     <label for="input-10">
                         What is the last thing you did before starting this form?
                     </label>
                     <input id="input-10" />
                 </p>
+                <p class="error" id="error-input-10"></p>
                 <p>
                     <label for="input-11">
                         What condition is your body currently in? (single word answer)
                     </label>
                     <input id="input-11" />
                 </p>
+                <p class="error" id="error-input-11"></p>
                 <p>
                     <label for="input-12">
                         Favorite state of matter?
                     </label>
                     <input id="input-12" />
                 </p>
+                <p class="error" id="error-input-12"></p>
                 <p>
                     <label for="input-13">
                         A word your name kind of sounds like? (e.g. Brian &rarr; Brain)
                     </label>
                     <input id="input-13" />
                 </p>
+                <p class="error" id="error-input-13"></p>
                 <p>
                     <label for="input-14">
                         What is your Zodiac sign?
@@ -161,6 +176,7 @@
                     </label>
                     <input id="input-15" />
                 </p>
+                <p class="error" id="error-input-15"></p>
             </section>
 
             <section>
@@ -176,12 +192,14 @@
                     </label>
                     <input id="input-16" />
                 </p>
+                <p class="error" id="error-input-16"></p>
                 <p>
                     <label for="input-17">
                         What is the last word of the title of your favorite Kubric film?
                     </label>
                     <input id="input-17" />
                 </p>
+                <p class="error" id="error-input-17"></p>
                 <p>
                     <label for="input-18">
                         What is the first word of the title of your favorite Joy
@@ -189,6 +207,7 @@
                     </label>
                     <input id="input-18" />
                 </p>
+                <p class="error" id="error-input-18"></p>
                 <p>
                     <label for="input-19">
                         What is a scientific term you picked up from listening to NPR
@@ -196,6 +215,7 @@
                     </label>
                     <input id="input-19" />
                 </p>
+                <p class="error" id="error-input-19"></p>
                 <p>
                     <label for="input-20">
                         What is a piece of military hardware you think looks cool even
@@ -203,6 +223,7 @@
                     </label>
                     <input id="input-20" />
                 </p>
+                <p class="error" id="error-input-20"></p>
                 <p>
                     <label for="input-21a">
                         What is something you'd enjoy watching Mads Mikkelsen do?
@@ -210,6 +231,7 @@
                     </label>
                     <input id="input-21a" />
                 </p>
+                <p class="error" id="error-input-21a"></p>
             </section>
 
             <section>
@@ -226,8 +248,8 @@
                     If your name already has -man at the end of it, I guess you're just
                     going to have -manman at the end of your name.
                 </p>
-                <p>
-                    <button class="die" id="die-4-1">
+                <div class="dice-set-1">
+                    <button class="die" id="die-4-1-1">
                         <div class="dot-column">
                             <span class="dot"></span>
                             <span class="dot"></span>
@@ -237,8 +259,9 @@
                             <span class="dot"></span>
                         </div>
                     </button>
-                    <p class="result"></p>
-                </p>
+                    <div class="result"></div>
+                </div>
+                <p class="error" id="error-die-4-1"></p>
 
                 <p>
                     THE CONDITION CONDITION: Roll a d8. If you get 1-5, you do not have
@@ -247,8 +270,8 @@
                     were; your name must have "Old" at the beginning of it. If you get
                     8, you are how you currently are.
                 </p>
-                <p>
-                    <button class="die" id="die-4-2">
+                <div class="dice-set-1">
+                    <button class="die" id="die-4-2-1">
                         <div class="dot-column">
                             <span class="dot"></span>
                             <span class="dot"></span>
@@ -258,8 +281,9 @@
                             <span class="dot"></span>
                         </div>
                     </button>
-                    <p class="result"></p>
-                </p>
+                    <div class="result"></div>
+                </div>
+                <p class="error" id="error-die-4-2"></p>
 
                 <p>
                     THE CLONE CONDITION: Roll a d12. If you get 1-11, you do not have
@@ -268,8 +292,8 @@
                     someone else. Find someone who has completed this form and replace
                     50% of your Kojima name with 50% of their Kojima name.
                 </p>
-                <p>
-                    <button class="die" id="die-4-3">
+                <div class="dice-set-1">
+                    <button class="die" id="die-4-3-1">
                         <div class="dot-column">
                             <span class="dot"></span>
                             <span class="dot"></span>
@@ -279,8 +303,9 @@
                             <span class="dot"></span>
                         </div>
                     </button>
-                    <p class="result"></p>
-                </p>
+                    <div class="result"></div>
+                </div>
+                <p class="error" id="error-die-4-3"></p>
 
                 <p>
                     THE KOJIMA CONDITION: Roll a d100. If you get 1-68 or 70-100, you do
@@ -291,8 +316,8 @@
                     pal. Stop filling in this form now. You're Hideo Kojima. Go do the
                     things that Hideo Kojima does.
                 </p>
-                <p>
-                    <button class="die" id="die-4-3">
+                <div class="dice-set-1">
+                    <button class="die" id="die-4-4-1">
                         <div class="dot-column">
                             <span class="dot"></span>
                             <span class="dot"></span>
@@ -302,15 +327,17 @@
                             <span class="dot"></span>
                         </div>
                     </button>
-                    <p class="result"></p>
-                </p>
+                    <div class="result"></div>
+                </div>
+                <p class="error" id="error-die-4-4"></p>
             </section>
 
             <section class="submit-section">
                 <p class="note">
                     Make sure you've filled in everything and rolled all the dice.
                 </p>
-                <button class="submit-button">Generate My Kojima Names</button>
+                <p class="error" id="error-submit"></p>
+                <button id="submit-button">Generate My Kojima Names</button>
             </section>
         </div>
     </body>
