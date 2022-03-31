@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;1,300&display=swap');
+
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+
+#main-container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+header {
+    text-align: center;
+}
+
+header > p {
+    font-size: 11pt;
+}
+
+hr {
+    height: 3px;
+    background: black;
+    border: none;
+}
+
+section {
+    margin: 0px 0px 100px 0px;
+}
+
+.note {
+    font-style: italic;
+}
+
+
+button {
+    cursor: pointer;
+}
+
+input {
+    border: none;
+    border-bottom: 1px solid gray;
+    width: 100%;
+}
+
+
+.submit-section {
+    text-align: center;
+}
+
+.submit-button {
+    font-size: 24pt;
+    color: black;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+.submit-button:hover, .submit-button:active {
+    color: white;
+    background-color: black;
+    outline: none;
+}
+
+.die {
+    width: 40px;
+    height: 40px;
+    margin: 0px;
+    padding: 4px;
+    border-radius: 10px;
+
+    display: flex;
+    justify-content: space-between;
+
+    transition: transform ease-in-out 1s;
+}
+
+.die:hover {
+    transform: rotate(360deg);
+}
+
+.die:active {
+    background-color: black;
+}
+
+.die:active .dot {
+    background-color: white;
+}
+
+.die .dot-column {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.dot {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: black;
+}
+
