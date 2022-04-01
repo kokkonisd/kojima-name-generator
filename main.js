@@ -509,7 +509,7 @@ function handleSubmit ()
         return encodeURIComponent(name);
     }).join("%2C");
 
-    console.log(namesURL);
+    window.location.href = namesURL;
 }
 
 

@@ -58,7 +58,7 @@ input {
     border-radius: 10px;
 }
 
-.submit-button:hover, .submit-button:active {
+#submit-button:hover, #submit-button:active {
     color: white;
     background-color: black;
     outline: none;
