@@ -12,6 +12,11 @@ body {
     padding: 10px;
 }
 
+h1 a, h1 a:hover, h1 a:visited {
+    color: inherit;
+    text-decoration: inherit;
+}
+
 header {
     text-align: center;
 }
