@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     document.getElementById("submit-button").addEventListener(
         "click",
         function(event) {
-            window.location.href = "kojima-names-generator/";
+            window.location.href = "/";
         }
     );
 });
