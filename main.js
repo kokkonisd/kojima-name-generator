@@ -500,7 +500,7 @@ function handleSubmit ()
         subtextNames.add(getSubtextName(set));
     }
 
-    let namesURL = "kojima-name-generator/names.html?";
+    let namesURL = "names.html?";
 
     namesURL += "normalNames=" + Array.from(normalNames).map(function(name) {
         return encodeURIComponent(name);
