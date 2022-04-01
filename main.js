@@ -1,3 +1,8 @@
+/**
+ * Global state object.
+ * This object contains all the input data from the main page. This input data will
+ * get populated and used to generate the Kojima names.
+ **/
 let NAME_DATA = {
     "DICE_SETS": null,
     "SECTION_2_3": {
@@ -63,6 +68,12 @@ let NAME_DATA = {
     }
 }
 
+
+/**
+ * Reset the values of Section 4 in the global state object.
+ *
+ * @return null
+ **/
 function resetSection4 ()
 {
     for (let subsection in NAME_DATA["SECTION_4"]) {
@@ -72,22 +83,41 @@ function resetSection4 ()
     }
 }
 
+
+/**
+ * Roll a die and get the result.
+ *
+ * @param int sides: the number of sides of the die to roll.
+ * @return int: the result of the die roll.
+ **/
 function rollDie (sides)
 {
     return Math.ceil(Math.random() * (sides));
 }
 
+
+/**
+ * Handle a die roll from Section 4.
+ *
+ * @param Event e: the event that triggered the die roll.
+ * @return null
+ **/
 function handleDieRoll_4_Generic (e)
 {
+    // Since the die element is composed of other elements, the target might get
+    // reported as one of the children elements. In order to get the button itself, we
+    // "bubble up" through the parents until we arrive at a button element.
     let target = e.target;
-
     while (target.tagName !== "BUTTON") {
         target = target.parentElement;
     }
 
+    // The button has a class of `die-<section>-<subsection>-<dice set>`.
     let dieSubSection = target.id.substring(6, 7);
     let diceSetNumber = target.id.substring(8);
 
+    // Roll the die depending on which subsection we're in and compute the message to
+    // show to the user.
     let roll = null;
     let message = "";
     if (dieSubSection === "1") {
@@ -133,7 +163,9 @@ function handleDieRoll_4_Generic (e)
     }
 
     // Update the global data object.
-    NAME_DATA["SECTION_4"]["SUBSECTION_" + dieSubSection]["DICE_SET_" + diceSetNumber] = roll;
+    NAME_DATA["SECTION_4"]["SUBSECTION_" + dieSubSection][
+        "DICE_SET_" + diceSetNumber
+    ] = roll;
 
     // Update the message next to the die.
     let dieButtonParent = target.parentElement;
@@ -141,6 +173,12 @@ function handleDieRoll_4_Generic (e)
     resultElement.innerHTML = message;
 }
 
+
+/**
+ * Handle a die roll from Section 1, Subsection 1.
+ *
+ * @return null
+ **/
 function handleDieRoll_1_1 ()
 {
     // First, reset section 4; since that section depends on this roll, it should be
@@ -154,8 +192,8 @@ function handleDieRoll_1_1 ()
         }
     );
 
+    // Roll the die and compute the message to show to the user.
     let roll = rollDie(6);
-
     let message = "";
     if (roll === 6) {
         message = "You rolled a 6. Congrats, you get to roll a lot of dice later.";
@@ -163,33 +201,45 @@ function handleDieRoll_1_1 ()
         message = "You rolled a " + roll + ". You'll get one name per category.";
     }
 
+    // If the user rolled anything but a 6, we have 1 dice set. Otherwise, we have 7.
     NAME_DATA["DICE_SETS"] = roll === 6 ? 7 : 1;
         
-    // Delete all dice sets and make new ones from scratch.
+    // Since we have just calculated the number of dice sets, we need to reset the
+    // number of dice displayed in Section 4. The simplest way to do that is to delete
+    // all dice from Section 4 and put them back based on how many dice sets we have.
+    
+    // First, we need to clone the first dice set, so that we can spawn them back.
     let diceSet = Array.from(document.getElementsByClassName("dice-set-1"));
     let baseDiceSet = diceSet.map(function(set) {
         return set.cloneNode(true);
     });
+    // We also need the closest previous sibling to the dice set, so that we know where
+    // to spawn new dice sets.
     let baseDiceSetSiblings = diceSet.map(function(set) {
         return set.previousSibling;
     });
+    // Now that we've got all the information we need, we can go ahead and delete the
+    // dice sets.
     Array.from(document.querySelectorAll('[class^="dice-set-"]')).forEach(
         function(set) {
             set.remove();
         }
     );
 
+    // Let's now iterate over every dice of every dice set and spawn it again if needed.
     for (let i = 0; i < baseDiceSet.length; i++) {
         setSibling = baseDiceSetSiblings[i];
         diceSet = baseDiceSet[i];
 
-        let numberOfDiceSets = 1;
-        if (roll === 6) {
-            numberOfDiceSets = 7;
-        }
-
-        for (let j = numberOfDiceSets; j > 0; j--) {
+        // We need to iterate backwards on the dice set number, because we're using
+        // `.after()` to add the dice sets to the page, which means that they will
+        // always get added right after the closest previous sibling. However, we need
+        // the dice sets to be in order (1 first, 7 last), so the most convenient way is
+        // to insert the last one first.
+        for (let j = NAME_DATA["DICE_SETS"]; j > 0; j--) {
+            // Clone the dice set to spawn it.
             let newDiceSet = diceSet.cloneNode(true);
+            // Adjust the class, to reflect the correct dice set number.
             newDiceSet.className = "dice-set-" + j;
 
             // Rename the button's ID.
@@ -211,8 +261,19 @@ function handleDieRoll_1_1 ()
 }
 
 
+/**
+ * Prepare the input for the name generators.
+ *
+ * This function parses all the raw inputs, performs validity checks where needed and
+ * populates the global state object. At the end, it either signals a failure or
+ * guarantees that the global state object is populated correctly and ready to go for
+ * name generation.
+ *
+ * @return bool: true if no errors were detected, false otherwise.
+ **/
 function prepareInput ()
 {
+    // We need a flag to report if we had errors or not when returning.
     let hadError = false;
 
     // Clear all the error messages.
@@ -295,7 +356,6 @@ function prepareInput ()
         let inputs = limitedWordInputs[limitGroup][0];
         let wordLimit = limitedWordInputs[limitGroup][1];
 
-
         for (let input in inputs) {
             let inputValue = document.getElementById(inputs[input]).value.trim();
             let numberOfWords = 0;
@@ -325,6 +385,7 @@ function prepareInput ()
             ).value.trim();
         }
     } else {
+        // We found at least one error, so we need to report that to the user.
         document.getElementById("error-submit").innerHTML = (
             "Some things don't look right. Scroll back up to see how you can fix them."
         );
@@ -334,6 +395,13 @@ function prepareInput ()
 }
 
 
+/**
+ * Apply conditions from a dice set from Section 4 to a name.
+ *
+ * @param int set: the set number to apply conditions from.
+ * @param str name: the name to apply conditions to.
+ * @return str: the name with the conditions applied.
+ **/
 function applyConditions (set, name)
 {
     if (NAME_DATA["SECTION_4"]["SUBSECTION_1"]["DICE_SET_" + set] === 4) {
@@ -352,6 +420,12 @@ function applyConditions (set, name)
 }
 
 
+/**
+ * Compute the Normal Name.
+ *
+ * @param int set: the set number to compute the name from.
+ * @return str: the computed name.
+ **/
 function getNormalName (set)
 {
     let fullName = NAME_DATA["SECTION_2_3"]["input-1"];
@@ -360,6 +434,12 @@ function getNormalName (set)
 }
 
 
+/**
+ * Compute the Occupational Name.
+ *
+ * @param int set: the set number to compute the name from.
+ * @return str: the computed name.
+ **/
 function getOccupationalName (set)
 {
     let lastName = NAME_DATA["SECTION_2_3"]["input-2a"];
@@ -380,6 +460,12 @@ function getOccupationalName (set)
 }
 
 
+/**
+ * Compute the Horny Name.
+ *
+ * @param int set: the set number to compute the name from.
+ * @return str: the computed name.
+ **/
 function getHornyName (set)
 {
     let lastName = NAME_DATA["SECTION_2_3"]["input-3"];
@@ -407,6 +493,12 @@ function getHornyName (set)
 }
 
 
+/**
+ * Compute the The Name.
+ *
+ * @param int set: the set number to compute the name from.
+ * @return str: the computed name.
+ **/
 function getTheName (set)
 {
     let roll = rollDie(4);
@@ -424,6 +516,12 @@ function getTheName (set)
 }
 
 
+/**
+ * Compute the Cool Name.
+ *
+ * @param int set: the set number to compute the name from.
+ * @return str: the computed name.
+ **/
 function getCoolName (set)
 {
     let firstName = NAME_DATA["SECTION_2_3"]["input-21a"];
@@ -447,6 +545,12 @@ function getCoolName (set)
 }
 
 
+/**
+ * Compute the Violent Name.
+ *
+ * @param int set: the set number to compute the name from.
+ * @return str: the computed name.
+ **/
 function getViolentName (set)
 {
     let lastName = NAME_DATA["SECTION_2_3"]["input-5"];
@@ -467,6 +571,12 @@ function getViolentName (set)
 }
 
 
+/**
+ * Compute the Name That Lacks Subtext.
+ *
+ * @param int set: the set number to compute the name from.
+ * @return str: the computed name.
+ **/
 function getSubtextName (set)
 {
     let fullName = NAME_DATA["SECTION_2_3"]["input-10"];
@@ -475,13 +585,27 @@ function getSubtextName (set)
 }
 
 
+/**
+ * Handle a submit event.
+ *
+ * This event is triggered when the user clicks on the submit button at the bottom of
+ * the page.
+ *
+ * @return null
+ **/
 function handleSubmit ()
 {
+    // First, prepare the input; if any validation errors came up, they are already
+    // reported to the user. However, we cannot proceede if there are errors; so we need
+    // to stop right here.
     let result = prepareInput();
     if (!result) {
         return
     }
 
+    // If there are multiple dice sets, there's a chance that some names might be
+    // identical. We don't want to display the same name multiple times, so we want to
+    // use Sets to store the names, so that the duplicates get filtered out.
     let normalNames = new Set();
     let occupationalNames = new Set();
     let hornyNames = new Set();
@@ -490,6 +614,7 @@ function handleSubmit ()
     let violentNames = new Set();
     let subtextNames = new Set();
 
+    // Populate the name sets for each dice set.
     for (let set = 1; set <= NAME_DATA["DICE_SETS"]; set++) {
         normalNames.add(getNormalName(set));
         occupationalNames.add(getOccupationalName(set));
@@ -500,6 +625,8 @@ function handleSubmit ()
         subtextNames.add(getSubtextName(set));
     }
 
+    // The names are shown on a different page, and they are embedded in the URL as
+    // URI components.
     let namesURL = "names.html?";
 
     namesURL += "normalNames=" + Array.from(normalNames).map(function(name) {
