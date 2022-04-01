@@ -46,6 +46,15 @@ input {
 }
 
 
+select {
+    border: 2px solid black;
+    height: 30px;
+    background-color: white;
+    border-radius: 10px;
+    margin-top: 10px;
+    display: block;
+}
+
 .submit-section {
     text-align: center;
 }
