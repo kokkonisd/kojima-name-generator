@@ -63,11 +63,22 @@ let NAME_DATA = {
     }
 }
 
-function rollDie (sides) {
+function resetSection4 ()
+{
+    for (let subsection in NAME_DATA["SECTION_4"]) {
+        for (let diceSet in NAME_DATA["SECTION_4"][subsection]) {
+            NAME_DATA["SECTION_4"][subsection][diceSet] = null;
+        }
+    }
+}
+
+function rollDie (sides)
+{
     return Math.ceil(Math.random() * (sides));
 }
 
-function handleDieRoll_4_Generic (e) {
+function handleDieRoll_4_Generic (e)
+{
     let target = e.target;
 
     while (target.tagName !== "BUTTON") {
@@ -126,11 +137,23 @@ function handleDieRoll_4_Generic (e) {
 
     // Update the message next to the die.
     let dieButtonParent = target.parentElement;
-    let resultElement = dieButtonParent.getElementsByClassName("result")[0];
+    let resultElement = dieButtonParent.getElementsByClassName("die-result")[0];
     resultElement.innerHTML = message;
 }
 
-function handleDieRoll_1_1 () {
+function handleDieRoll_1_1 ()
+{
+    // First, reset section 4; since that section depends on this roll, it should be
+    // reset.
+    // We need to do two things to reset it: reset the values in the NAME_DATA object,
+    // and also reset all the "die-result" fields that might be populated on the page.
+    resetSection4();
+    Array.from(document.getElementsByClassName("die-result")).forEach(
+        function(dieResultElement) {
+            dieResultElement.innerHTML = "";
+        }
+    );
+
     let roll = rollDie(6);
 
     let message = "";
@@ -183,7 +206,7 @@ function handleDieRoll_1_1 () {
 
     // Update the message next to the die.
     let dieButtonParent = document.getElementById("die-1-1").parentElement;
-    let resultElement = dieButtonParent.getElementsByClassName("result")[0];
+    let resultElement = dieButtonParent.getElementsByClassName("die-result")[0];
     resultElement.innerHTML = message;
 }
 
