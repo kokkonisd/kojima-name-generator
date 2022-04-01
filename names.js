@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let URIComponentName = categoryInfo[1];
 
         let names = URLParams.get(URIComponentName) || "unknown";
-        names = names.replace(",", " <em>or</em> ");
+        names = names.replaceAll(",", " <em>or</em> ");
 
         document.getElementById(elementID).innerHTML = names;
     });
